@@ -1,0 +1,114 @@
+dlio_loc:
+  ros__parameters:
+    registration_method: "NDT"
+    ndt_resolution: 2.0 #3.0
+    ndt_step_size: 0.1
+    transform_epsilon: 0.001 #0.01
+    voxel_leaf_size: 0.1 #1.0 只对GICP有效
+    scan_max_range: 100.0
+    scan_min_range: 1.0
+    scan_period: 0.1
+    use_pcd_map: true
+    map_path: "/home/ls/ros2_car_ws/dlio_map.pcd"
+    init_pose_path: "/home/ls/ros2_car_ws/init_pose.yaml"
+    set_initial_pose: false
+    initial_pose_x: 0.0
+    initial_pose_y: 0.0
+    initial_pose_z: 0.0
+    initial_pose_yaw: 0.0
+    initial_pose_roll: 0.0
+    initial_pose_pitch: 0.0
+    use_odom: false
+    use_imu: true
+    enable_debug: true
+
+    frames:
+      odom: odom
+      baselink: base_link
+      lidar: laser_link
+      imu: imu
+      map: map
+
+    map:
+      waitUntilMove: true
+      dense:
+        filtered: false
+      sparse:
+        frequency: 1.0
+        leafSize: 0.25
+
+    odom:
+
+      gravity: 9.80665
+
+      imu:
+        approximateGravity: true
+        calibration:
+          gyro: true
+          accel: true
+          time: 3.0
+        bufferSize: 2000 #5000
+
+      preprocessing:
+        cropBoxFilter:
+          size: 1.0
+        voxelFilter:
+          res: 0.5 #0.4
+
+      keyframe:
+        threshD: 1.0
+        threshR: 45.0
+
+      submap:
+        keyframe:
+          knn: 10
+          kcv: 10
+          kcc: 10
+      gicp:
+        minNumPoints: 64 #64
+        kCorrespondences: 20 #16
+        maxCorrespondenceDistance: 120.0 #0.5
+        maxIterations: 48 #32
+        transformationEpsilon: 0.01 #0.01 0.001 0.005
+        rotationEpsilon: 0.01 #0.01 0.001 0.005
+        initLambdaFactor: 1e-9
+
+      geo:
+        Kp: 1.0
+        Kv: 2.25 #2.25
+        Kq: 0.8 #0.8
+        Kab: 1.25 #1.25
+        Kgb: 1.0
+        abias_max: 1.25 #1.5
+        gbias_max: 0.5 #0.8      
+
+    version: 1.1.1
+
+    adaptive: true
+
+    pointcloud:
+      deskew: true
+      voxelize: true
+
+    imu:
+      calibration: true
+      intrinsics:
+        accel:
+          bias: [ 0.0, 0.0, 0.0 ]
+          sm:   [ 1.,  0.,  0.,
+                  0.,  1.,  0.,
+                  0.,  0.,  1. ]
+        gyro:
+          bias: [ 0.0, 0.0, 0.0 ]
+
+    extrinsics:
+      baselink2imu:
+        t: [ 0.9, 0., 0.85 ]
+        R: [ 1.,  0.,  0.,
+            0.,  1.,  0.,
+            0.,  0.,  1. ]
+      baselink2lidar:
+        t: [ 0.96,  0.,  1.95 ]
+        R: [ 1.,  0.,  0.,
+            0.,  1.,  0.,
+            0.,  0.,  1. ]
